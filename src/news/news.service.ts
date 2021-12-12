@@ -24,7 +24,18 @@ export class NewsService {
     const id = Date.now()
     const finalNews = {
       ...news,
-      id: id,
+      id,
+    }
+    this.news.push(finalNews);
+    return finalNews;
+  }
+
+  edit(id: News['id']): News {
+    const title = 'Совершенно новая новость.......................................'
+    const newEdit = this.news.find((news: News) => news.id === id)
+    const finalNews = {
+      ...newEdit,
+      title,
     }
     this.news.push(finalNews);
     return finalNews;
