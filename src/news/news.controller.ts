@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { News, NewsService } from './news.service';
+import { News, NewsService, NewsEdit } from './news.service';
 
 @Controller('news')
 export class NewsController {
@@ -17,10 +17,10 @@ export class NewsController {
     return this.newsService.create(news);
   }
 
-  @Put()
-  edit(@Param('id') id: string): News { 
+  @Put('/:id')
+  edit(@Param('id') id: string, @Body() news: NewsEdit): News { 
     let idInt = parseInt(id);
-    return this.newsService.edit(idInt);
+    return this.newsService.edit(idInt, news);
   }
 
   @Delete('/:id')
