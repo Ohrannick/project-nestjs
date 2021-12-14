@@ -6,19 +6,24 @@ export class NewsController {
   constructor(private readonly newsService: NewsService) {
   }
 
-  @Get('/:id')
-  get(@Param('id') id: string): News { 
+  @Get('/detail/:id')
+  get(@Param('id') id: string): News {
     let idInt = parseInt(id);
     return this.newsService.find(idInt);
   }
 
+  @Get('/all')
+  getAll(): News[] {
+    return this.newsService.getAll();
+  }
+
   @Post()
-  create(@Body() news: News): News { 
+  create(@Body() news: News): News {
     return this.newsService.create(news);
   }
 
   @Put('/:id')
-  edit(@Param('id') id: string, @Body() news: NewsEdit): News { 
+  edit(@Param('id') id: string, @Body() news: NewsEdit): News {
     let idInt = parseInt(id);
     return this.newsService.edit(idInt, news);
   }

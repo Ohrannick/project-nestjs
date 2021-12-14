@@ -21,9 +21,9 @@ export class NewsService {
   private readonly news: News[] = [
     {
       id: 1,
-      title: 'Наша первая новостя', 
-      description: 'Урра!!!', 
-      author: 'Ohrannick', 
+      title: 'Наша первая новостя',
+      description: 'Урра!!!',
+      author: 'Ohrannick',
       countViews: 12
     }
   ];
@@ -56,9 +56,13 @@ export class NewsService {
     return this.news.find((news: News) => news.id === id)
   }
 
+  getAll(): News[] {
+    return this.news
+  }
+
   remove(id: News['id']): Boolean {
     const indexRemoveNews = this.news.findIndex((news: News) => news.id === id);
-    if(indexRemoveNews !== -1) {
+    if (indexRemoveNews !== -1) {
       this.news.splice(indexRemoveNews, 1);
       return true
     }
