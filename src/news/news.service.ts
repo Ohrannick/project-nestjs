@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Comment } from './comments/comments.service';
 
 export interface News {
   id?: number;
@@ -6,6 +7,8 @@ export interface News {
   description: string;
   author: string;
   countViews?: number;
+  comments?: Comment[],
+  cover?: string
 }
 
 export interface NewsEdit {
@@ -14,6 +17,8 @@ export interface NewsEdit {
   description?: string;
   author?: string;
   countViews?: number;
+  comments?: Comment[],
+  cover?: string
 }
 
 @Injectable()
@@ -24,7 +29,8 @@ export class NewsService {
       title: 'Наша первая новостя',
       description: 'Урра!!!',
       author: 'Ohrannick',
-      countViews: 12
+      countViews: 12,
+      cover: 'https://klike.net/uploads/posts/2019-06/1559715614_1.jpg'
     }
   ];
 
