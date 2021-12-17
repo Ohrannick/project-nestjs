@@ -7,7 +7,7 @@ export interface News {
   description: string;
   author: string;
   countViews?: number;
-  comments?: Comment[],
+  comments?: Comment[];
   cover?: string
 }
 
@@ -17,7 +17,7 @@ export interface NewsEdit {
   description?: string;
   author?: string;
   countViews?: number;
-  comments?: Comment[],
+  comments?: Comment[];
   cover?: string
 }
 

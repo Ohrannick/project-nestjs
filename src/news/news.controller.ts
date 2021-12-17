@@ -3,6 +3,7 @@ import { CommentsService } from './comments/comments.service';
 import { News, NewsService, NewsEdit } from './news.service';
 import renderNewsAll from '../views/news/news-all';
 import renderTemplate from '../views/template'
+import { CreateNewsDto } from './dtos/create-news-dto';
 
 @Controller('news')
 export class NewsController {
@@ -36,7 +37,7 @@ export class NewsController {
   }
 
   @Post('/api')
-  create(@Body() news: News): News {
+  create(@Body() news: CreateNewsDto): News {
     return this.newsService.create(news);
   }
 
