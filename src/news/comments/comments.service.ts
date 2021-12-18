@@ -49,14 +49,14 @@ export class CommentsService {
   }
 
   edit(idNews: number, idComment: number, comments: NewComment) {
-    const newEditComment = this.comments[idNews]?.findIndex((c) => c.id === idComment) === -1;
-    if (!this.comments[idNews] || newEditComment) {
+    const newEditComment = this.comments[idNews]?.findIndex((c) => c.id === idComment);
+    if (!this.comments[idNews] || !newEditComment) {
       return false;
     }
 
     this.comments[idNews][newEditComment] = {
       ...this.comments[idNews][newEditComment],
-      comments,
+      ...comments,
     }
     return 'Комментарий отредактирован...'
   }
