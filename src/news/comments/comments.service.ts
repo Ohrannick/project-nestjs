@@ -50,7 +50,7 @@ export class CommentsService {
 
   edit(idNews: number, idComment: number, comments: NewComment) {
     const newEditComment = this.comments[idNews]?.findIndex((c) => c.id === idComment);
-    if (!this.comments[idNews] || !newEditComment) {
+    if (!this.comments[idNews] || newEditComment === -1) {
       return false;
     }
 

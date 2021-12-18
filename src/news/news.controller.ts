@@ -1,10 +1,17 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { CommentsService } from './comments/comments.service';
 import { News, NewsService, NewsEdit } from './news.service';
 import renderNewsAll from '../views/news/news-all';
 import renderTemplate from '../views/template'
 import { CreateNewsDto } from './dtos/create-news-dto';
+import renderNewsDetail from 'src/views/news/news-detail';
+import { EditNewsDto } from './dtos/edit-news-dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { HelperFileLoader } from 'src/utils/HelperFileLoader';
 
+const PATH_NEWS = '/news-static/';
+HelperFileLoader.path = PATH_NEWS;
 @Controller('news')
 export class NewsController {
   constructor(
@@ -36,13 +43,38 @@ export class NewsController {
     return renderTemplate(content, { title: 'Список новостей', description: 'Крутейшие новости на свете' })
   }
 
+  @Get('/detail/:id')
+  getDetailView(@Param('id') id: string) {
+    let idInt = parseInt(id);
+    const news = this.newsService.find(idInt);
+    const comments = this.commentsService.find(idInt);
+    const content = renderNewsDetail(news, comments)
+    return renderTemplate(content, { title: news.title, description: news.description })
+  }
+
   @Post('/api')
-  create(@Body() news: CreateNewsDto): News {
+  @UseInterceptors(
+    FileInterceptor('cover', {
+      storage: diskStorage({
+        destination: HelperFileLoader.destinationPath,
+        filename: HelperFileLoader.customFileName,
+      }),
+    }),
+  )
+
+  create(
+    @Body() news: CreateNewsDto,
+    @UploadedFile() cover: Express.Multer.File,
+  ): News {
+    if (cover?.filename) {
+      news.cover = PATH_NEWS + cover.filename;
+    }
+
     return this.newsService.create(news);
   }
 
   @Put('/api/:id')
-  edit(@Param('id') id: string, @Body() news: NewsEdit): News {
+  edit(@Param('id') id: string, @Body() news: EditNewsDto): News {
     let idInt = parseInt(id);
     return this.newsService.edit(idInt, news);
   }
