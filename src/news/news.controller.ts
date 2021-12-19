@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { CommentsService } from './comments/comments.service';
-import { News, NewsService, NewsEdit } from './news.service';
+import { News, NewsService } from './news.service';
 import renderNewsAll from '../views/news/news-all';
 import renderTemplate from '../views/template'
 import { CreateNewsDto } from './dtos/create-news-dto';

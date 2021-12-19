@@ -4,12 +4,14 @@ export type Comment = {
   id?: number;
   message: string;
   author: string;
+  avatar?: string;
 }
 
 export type NewComment = {
   id?: number;
   message?: string;
   author?: string;
+  avatar?: string;
 }
 
 export function getRandomInt(min = 1, max = 9999): number {
