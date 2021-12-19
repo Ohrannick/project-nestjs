@@ -20,7 +20,7 @@ function renderNewsComments(comments: Comment[]): string {
     commentsHtml += `
     <div class="row">
       <div class="col-lg-1">
-        <div style="background: #ccc; width: 75px; height: 75px;" class="rounded-lg mb-2"></div>
+        <img src="${comment.avatar}" style="width: 75px; height: 75px;" class="rounded-lg mb-2"/>
       </div>
       <div class="col-lg-8">
         <div>${comment.author}</div>
