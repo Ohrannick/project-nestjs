@@ -28,9 +28,13 @@ export class CommentsService {
     if (!this.comments[idNews]) {
       this.comments[idNews] = []
     }
+    const finalComment = {
+      ...comments,
+      id: getRandomInt()
+    }
 
-    this.comments[idNews].push({ ...comments, id: getRandomInt() })
-    return 'Комментарий был создан...'
+    this.comments[idNews].push(finalComment)
+    return finalComment
   }
 
   find(idNews: number): Comment[] | null {
