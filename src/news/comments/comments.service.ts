@@ -64,6 +64,6 @@ export class CommentsService {
       ...this.comments[idNews][newEditComment],
       ...comments,
     }
-    return 'Комментарий отредактирован...'
+    return this.comments[idNews][newEditComment]
   }
 }

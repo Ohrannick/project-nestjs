@@ -10,5 +10,5 @@ export class CreateCommentDto {
   author: string;
 
   @ValidateIf((o) => o.avatar)
-  avatar: string;
+  avatar?: string;
 }
