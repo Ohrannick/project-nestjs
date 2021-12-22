@@ -1,14 +1,15 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Render, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { CommentsService } from './comments/comments.service';
 import { News, NewsService } from './news.service';
-import renderNewsAll from '../views/news/news-all';
-import renderTemplate from '../views/template'
+// import renderNewsAll from '../views/news/news-all';
+// import renderTemplate from '../views/template'
+// import renderNewsDetail from 'src/views/news/news-detail';
 import { CreateNewsDto } from './dtos/create-news-dto';
-import renderNewsDetail from 'src/views/news/news-detail';
 import { EditNewsDto } from './dtos/edit-news-dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { HelperFileLoader } from 'src/utils/HelperFileLoader';
+import { MailService } from 'src/mail/mail.service';
 
 const PATH_NEWS = '/news-static/';
 HelperFileLoader.path = PATH_NEWS;
@@ -16,7 +17,8 @@ HelperFileLoader.path = PATH_NEWS;
 export class NewsController {
   constructor(
     private readonly newsService: NewsService,
-    private readonly commentsService: CommentsService
+    private readonly commentsService: CommentsService,
+    private readonly mailservice: MailService,
   ) { }
 
   @Get('/api/details/:id')
@@ -36,20 +38,26 @@ export class NewsController {
     return this.newsService.getAll();
   }
 
-  @Get('/all')
+  @Get('all')
+  @Render('news-list')
   getAllView() {
     const news = this.newsService.getAll();
-    const content = renderNewsAll(news)
-    return renderTemplate(content, { title: 'Список новостей', description: 'Крутейшие новости на свете' })
+    return { news, title: 'Список крутых новостей' }
+  }
+
+  @Get('create/new')
+  @Render('create-news')
+  async createView() {
+    return {}
   }
 
   @Get('/detail/:id')
-  getDetailView(@Param('id') id: string) {
+  @Render('news-detail')
+  async getDetailView(@Param('id') id: string) {
     let idInt = parseInt(id);
-    const news = this.newsService.find(idInt);
+    const news = await this.newsService.find(idInt);
     const comments = this.commentsService.find(idInt);
-    const content = renderNewsDetail(news, comments)
-    return renderTemplate(content, { title: news.title, description: news.description })
+    return { news, comments }
   }
 
   @Post('/api')
@@ -62,10 +70,10 @@ export class NewsController {
     }),
   )
 
-  create(
+  async create(
     @Body() news: CreateNewsDto,
     @UploadedFile() cover: Express.Multer.File,
-  ): News {
+  ): Promise<News> {
     const fileExtention = cover.originalname.split('.').reverse()[0];
     if (!fileExtention || !fileExtention.match(/(jpg|jpeg|png|gif)$/)) {
       throw new HttpException({
@@ -79,7 +87,10 @@ export class NewsController {
       news.cover = PATH_NEWS + cover.filename;
     }
 
-    return this.newsService.create(news);
+    const createNews = this.newsService.create(news);
+    await this.mailservice.sendNewNewsForAdmins(['ohrannick.pupkin@yandex.ru'], createNews)
+    return createNews
+
   }
 
   @Put('/api/:id')

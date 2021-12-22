@@ -30,7 +30,7 @@ export class NewsService {
       description: 'Урра!!!',
       author: 'Ohrannick',
       countViews: 12,
-      cover: 'https://klike.net/uploads/posts/2019-06/1559715614_1.jpg'
+      cover: '/news-static/4ea1e3c1-dd34-4dc9-85dc-abaaa32b5821.jpeg'
     }
   ];
 
