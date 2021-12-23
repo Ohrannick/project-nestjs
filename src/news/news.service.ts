@@ -30,7 +30,7 @@ export class NewsService {
       description: 'Урра!!!',
       author: 'Ohrannick',
       countViews: 12,
-      cover: '/news-static/4ea1e3c1-dd34-4dc9-85dc-abaaa32b5821.jpeg'
+      cover: '/news-static/4b8392cd-370d-434e-b5dc-796ba7278f41.png'
     }
   ];
 

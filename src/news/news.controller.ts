@@ -88,7 +88,7 @@ export class NewsController {
     }
 
     const createNews = this.newsService.create(news);
-    await this.mailservice.sendNewNewsForAdmins(['ohrannick.pupkin@yandex.ru'], createNews)
+    // await this.mailservice.sendNewNewsForAdmins(['ohrannick.pupkin@yandex.ru'], createNews)
     return createNews
 
   }

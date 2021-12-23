@@ -1,4 +1,4 @@
-import { Controller, Param, Post, Body, Get, Delete, Put, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Param, Post, Body, Get, Delete, Put, UseInterceptors, UploadedFile, Render } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { HelperFileLoader } from 'src/utils/HelperFileLoader';
@@ -24,6 +24,7 @@ export class CommentsController {
   create(
     @Param('idNews') idNews: string,
     @Body() comments: CreateCommentDto,
+    // @Render('create-comments'),
     @UploadedFile() avatar: Express.Multer.File,
   ) {
     if (avatar?.filename) {
