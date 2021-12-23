@@ -1,0 +1,27 @@
+{{#if news}}
+<img src="http://localhost:3000{{news.cover}}" style="width: 200px" class="card-img-top" alt="{{news.cover}}" />
+<h1>{{news.title}}</h1>
+<div>{{news.description}}</div>
+<div class="text-muted">Автор: {{news.author}}</div>
+
+{{#if comments}}
+<h2>Список комментариев</h2>
+{{#each comments}}
+<div class="row">
+  <div class="col-lg-1">
+    <img src={{#if this.avatar}} "http://localhost:3000{{this.avatar}}" {{else}}
+      https://hostenko.com/wpcafe/wp-content/uploads/rndavatar.png {{/if}} style="width: 75px; height: 75px;"
+      class="rounded-lg mb-2" />
+  </div>
+  <div class="col-lg-8">
+    <div>Автор: {{this.author}}</div>
+    <div>{{this.message}}</div>
+  </div>
+</div>
+{{/each}}
+{{else}}
+<h4>Комментариев нет...</h4>
+{{/if}}
+{{else}}
+<h1>Список новостей пуст!</h1>
+{{/if}}

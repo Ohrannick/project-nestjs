@@ -20,7 +20,7 @@ function renderNewsComments(comments: CreateCommentDto[]): string {
     commentsHtml += `
     <div class="row">
       <div class="col-lg-1">
-        <img src="${comment?.avatar ? comment.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsagpQoIDhNDNTj34LuXcARZk2fFytjzad2g&usqp=CAU'}" style="width: 75px; height: 75px;" class="rounded-lg mb-2"/>
+        <img src="${comment?.avatar ? comment.avatar : "https://hostenko.com/wpcafe/wp-content/uploads/rndavatar.png"}" style="width: 75px; height: 75px;" class="rounded-lg mb-2"/>
       </div>
       <div class="col-lg-8">
         <div>${comment.author}</div>
