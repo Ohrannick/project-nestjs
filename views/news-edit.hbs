@@ -1,0 +1,37 @@
+{{#if news}}
+<img src="http://localhost:3000{{news.cover}}" style="width: 200px" class="card-img-top" alt="{{news.cover}}" />
+<h1>{{news.title}}</h1>
+<div>{{news.description}}</div>
+<div class="text-muted">Автор: {{news.author}}</div>
+
+<form action="">
+  <div class="mb-3">
+    <label for="author" class="form-label">Автор</label>
+    <input class="form-control" name="author" id="author" value="{{news.author}}">
+    <label for="title" class="form-label">Заголовок</label>
+    <input class="form-control" name="title" id="title" value="{{news.title}}">
+  </div>
+  <div class="mb-3">
+    <label for="message" class="form-label">Сообщение</label>
+    <textarea class="form-control" id="message" name="message" rows="3" value="{{news.message}}"></textarea>
+  </div>
+  <button type="button" class="btn btn-primary" onclick='sendForm()'>Сохранить</button>
+</form>
+
+<script>
+  function sendForm() {
+    var data = new FormData($('form')[0]);
+    const idNews = window.location.pathname.split('/').reverse()[0]
+    $.ajax({
+      url: '/news/edit/api/' + idNews,
+      data: data,
+      cache: false,
+      contentType: false,
+      processData: false,
+      method: 'PUT',
+      success: function () {
+        window.location.reload()
+      }
+    });
+  }
+</script>

@@ -1,5 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Comment } from './comments/comments.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { NewsEntity } from './news.entity';
+import { CreateNewsDto } from './dtos/create-news-dto';
 
 export interface News {
   id?: number;
@@ -23,56 +27,47 @@ export interface NewsEdit {
 
 @Injectable()
 export class NewsService {
-  private readonly news: News[] = [
-    {
-      id: 1,
-      title: 'Наша первая новостя',
-      description: 'Урра!!!',
-      author: 'Ohrannick',
-      countViews: 12,
-      cover: '/news-static/4b8392cd-370d-434e-b5dc-796ba7278f41.png'
-    }
-  ];
+  constructor(
+    @InjectRepository(NewsEntity)
+    private newsRepository: Repository<NewsEntity>,
+  ) { }
 
-  create(news: News): News {
-    const id = Date.now()
-    const finalNews = {
-      ...news,
-      id,
-    }
-    this.news.push(finalNews);
-    return finalNews;
+  async create(news: CreateNewsDto): Promise<NewsEntity> {
+    const newsEntity = new NewsEntity()
+    newsEntity.title = news.title;
+    newsEntity.description = news.description;
+    newsEntity.cover = news.cover;
+    return this.newsRepository.save(news)
   }
 
-  edit(id: number, news: NewsEdit): News | undefined {
-    const newEdit = this.news.findIndex((news: News) => news.id === id)
-    if (newEdit !== -1) {
-      this.news[newEdit] = {
-        ...this.news[newEdit],
-        ...news,
-      };
+  async edit(id: number, news: NewsEdit): Promise<NewsEntity | null> {
+    const editableNews = await this.findById(id)
+    if (editableNews) {
+      const newsEntity = new NewsEntity()
+      newsEntity.title = news.title || editableNews.title;
+      newsEntity.description = news.description || editableNews.description;
+      newsEntity.cover = news.cover || editableNews.cover;
 
-      return this.news[newEdit];
+      return this.newsRepository.save(newsEntity);
     }
 
-    return undefined;
+    return null;
   }
 
-  find(id: News['id']): News | undefined {
-    return this.news.find((news: News) => news.id === id)
+  findById(id: News['id']): Promise<NewsEntity> {
+    return this.newsRepository.findOne(id)
   }
 
-  getAll(): News[] {
-    return this.news
+  getAll(): Promise<NewsEntity[]> {
+    return this.newsRepository.find({})
   }
 
-  remove(id: News['id']): Boolean {
-    const indexRemoveNews = this.news.findIndex((news: News) => news.id === id);
-    if (indexRemoveNews !== -1) {
-      this.news.splice(indexRemoveNews, 1);
-      return true
+  async remove(id: News['id']): Promise<NewsEntity | null> {
+    const removeNews = await this.findById(id);
+    if (removeNews) {
+      return this.newsRepository.remove(removeNews)
     }
-    return false
+    return null
   }
 
 
