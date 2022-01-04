@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { NewsModule } from './news/news.module';
 import { MailModule } from './mail/mail.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { MailModule } from './mail/mail.module';
       rootPath: join(__dirname, '..', 'public'),
     }),
     NewsModule,
-    MailModule],
+    MailModule,
+    UsersModule],
   controllers: [AppController],
   providers: [AppService],
 })

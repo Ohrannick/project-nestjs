@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { NewsEntity } from './news.entity';
 import { CreateNewsDto } from './dtos/create-news-dto';
+import { UsersService } from 'src/users/users.service';
 
 export interface News {
   id?: number;
@@ -30,6 +31,7 @@ export class NewsService {
   constructor(
     @InjectRepository(NewsEntity)
     private newsRepository: Repository<NewsEntity>,
+    private usersService: UsersService,
   ) { }
 
   async create(news: CreateNewsDto): Promise<NewsEntity> {
@@ -37,7 +39,9 @@ export class NewsService {
     newsEntity.title = news.title;
     newsEntity.description = news.description;
     newsEntity.cover = news.cover;
-    return this.newsRepository.save(news)
+    const _user = await this.usersService.findById(parseInt(news.userId));
+    newsEntity.user = _user;
+    return this.newsRepository.save(newsEntity)
   }
 
   async edit(id: number, news: NewsEdit): Promise<NewsEntity | null> {
@@ -47,15 +51,16 @@ export class NewsService {
       newsEntity.title = news.title || editableNews.title;
       newsEntity.description = news.description || editableNews.description;
       newsEntity.cover = news.cover || editableNews.cover;
-
       return this.newsRepository.save(newsEntity);
     }
-
     return null;
   }
 
   findById(id: News['id']): Promise<NewsEntity> {
-    return this.newsRepository.findOne(id)
+    return this.newsRepository.findOne(
+      { id },
+      { relations: ['user', 'comments', 'comments.user'] }
+    );
   }
 
   getAll(): Promise<NewsEntity[]> {
@@ -69,6 +74,5 @@ export class NewsService {
     }
     return null
   }
-
 
 }

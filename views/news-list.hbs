@@ -3,17 +3,17 @@
 <div class="row">
   {{#each news}}
   <div class="col-lg-4" style="margin-bottom: 10px">
-    <div class="card" style="height: auto; cursor: pointer" onclick="window.location.href = '/news/detail/{{this.id}}'">
-      <img src='http://localhost:3000{{this.cover}}' class="card-img-top" style="height: 200px; object-fit: cover;"
-        alt=''>
-      <div class="card-body">
-        <h5 class="card-title">{{this.title}}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">Автор: {{this.author}}</h6>
-        <h6 class="card-subtitle mb-2 text-muted">Количество просмотров: {{this.countViews}} </h6>
-        <p class="card-text">{{this.description}}</p>
-        <a href="http://localhost:3000/news/detail/{{this.id}}" class="btn btn-primary">К новости</a>
-        <a href="http://localhost:3000/news/edit/api/{{this.id}}" class="btn btn-success">Редактировать новость</a>
-      </div>
+    <img src='http://localhost:3000{{this.cover}}' class="card-img-top" style="height: 200px; object-fit: cover;"
+      alt=''>
+    <div class="card-body">
+      <h5 class="card-title">{{this.title}}</h5>
+      <h6 class="card-subtitle mb-2 text-muted">Автор: {{users.firstName}}</h6>
+      <p class="card-text">{{this.description}}</p>
+      <p class="card-text">{{this.createdAt}}</p>
+      <p class="card-text">{{this.updatedAt}}</p>
+      <div class="btn btn-primary" onclick="window.location.href = '/news/detail/{{this.id}}'" style="cursor: pointer">К
+        новости</div>
+      <a href="http://localhost:3000/news/edit/api/{{this.id}}" class="btn btn-success">Редактировать новость</a>
     </div>
   </div>
   {{/each}}

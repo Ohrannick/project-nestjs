@@ -1,4 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { CreateCommentDto } from 'src/news/comments/dtos/create-comment-dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UsersService } from 'src/users/users.service';
+import { Repository } from 'typeorm';
+import { NewsService } from '../news.service';
+import { CommentsEntity } from './comments.entity';
 
 export type Comment = {
   id?: number;
@@ -22,48 +28,75 @@ export function getRandomInt(min = 1, max = 9999): number {
 
 @Injectable()
 export class CommentsService {
+  constructor(
+    @InjectRepository(CommentsEntity)
+    private readonly commentsRepository: Repository<CommentsEntity>,
+    private readonly newsService: NewsService,
+    private readonly userService: UsersService,
+  ) { }
   private readonly comments = {};
 
-  create(idNews: number, comments: Comment) {
-    if (!this.comments[idNews]) {
-      this.comments[idNews] = []
+  async create(idNews: number, comment: CreateCommentDto): Promise<CommentsEntity> {
+    const _news = await this.newsService.findById(idNews)
+    if (!_news) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Новость не найдена',
+        },
+        HttpStatus.NOT_FOUND,
+      );
     }
-    const finalComment = {
-      ...comments,
-      id: getRandomInt()
+    const _user = await this.userService.findById(comment.userId)
+    if (!_user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Пользователь не найден',
+        },
+        HttpStatus.NOT_FOUND,
+      );
     }
 
-    this.comments[idNews].push(finalComment)
-    return finalComment
+    const commentsEntity = new CommentsEntity()
+    commentsEntity.news = _news
+    commentsEntity.user = _user
+    commentsEntity.message = comment.message
+
+    return this.commentsRepository.save(commentsEntity)
   }
 
-  find(idNews: number): Comment[] | null {
-    return this.comments[idNews] || null
+  async edit(idComment: number, comment: NewComment): Promise<CommentsEntity> {
+    const _comment = await this.commentsRepository.findOne(idComment);
+    _comment.message = comment.message;
+    return this.commentsRepository.save(_comment);
   }
 
-  remove(idNews: number, idComment: number): Comment[] | null {
-    if (!this.comments[idNews]) {
-      return null
-    }
-
-    const indexComment = this.comments[idNews].findIndex((c) => c.id === idComment)
-    if (indexComment === -1) {
-      return null
-    }
-
-    return this.comments[idNews].splice(indexComment, 1)
+  findAll(idNews: number): Promise<CommentsEntity[]> {
+    return this.commentsRepository.find({
+      where: { news: idNews },
+      relations: ['user'],
+    })
   }
 
-  edit(idNews: number, idComment: number, comments: NewComment) {
-    const newEditComment = this.comments[idNews]?.findIndex((c) => c.id === idComment);
-    if (!this.comments[idNews] || newEditComment === -1) {
-      return false;
+  async remove(idComment: number): Promise<CommentsEntity> {
+    const _comment = await this.commentsRepository.findOne(idComment)
+    if (!_comment) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Комментарий не найден',
+        },
+        HttpStatus.NOT_FOUND,
+      );
     }
 
-    this.comments[idNews][newEditComment] = {
-      ...this.comments[idNews][newEditComment],
-      ...comments,
-    }
-    return this.comments[idNews][newEditComment]
+    return this.commentsRepository.remove(_comment)
   }
+
+  async removeAll(idNews) {
+    const _comments = await this.findAll(idNews);
+    return await this.commentsRepository.remove(_comments);
+  }
+
 }

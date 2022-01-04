@@ -31,7 +31,6 @@ export class NewsController {
         HttpStatus.NOT_FOUND,
       )
     }
-
     return news
   }
 
@@ -66,9 +65,8 @@ export class NewsController {
         HttpStatus.NOT_FOUND,
       )
     }
-    const comments = this.commentsService.find(id);
 
-    return { news, comments }
+    return news
   }
 
   @Post('/api')
@@ -97,11 +95,9 @@ export class NewsController {
     if (cover?.filename) {
       news.cover = PATH_NEWS + cover.filename;
     }
-
     const createNews = await this.newsService.create(news);
     // await this.mailservice.sendNewNewsForAdmins(['ohrannick.pupkin@yandex.ru'], createNews)
     return createNews
-
   }
 
   @Put('/api/:id')
@@ -116,7 +112,6 @@ export class NewsController {
         HttpStatus.NOT_FOUND,
       )
     }
-
     return newsEditable;
   }
 
