@@ -1,10 +1,10 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from 'src/users/users.module';
 import { NewsModule } from '../news.module';
 import { CommentsController } from './comments.controller';
-import { CommentsEntity } from './comments.entity';
 import { CommentsService } from './comments.service';
+import { CommentsEntity } from './comments.entity';
+import { UsersModule } from '../../users/users.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([CommentsEntity]),

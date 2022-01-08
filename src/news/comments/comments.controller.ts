@@ -1,6 +1,4 @@
 import { Controller, Param, Post, Body, Get, Delete, Put, UseInterceptors, UploadedFile, Render, ParseIntPipe } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
 import { HelperFileLoader } from 'src/utils/HelperFileLoader';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dtos/create-comment-dto';

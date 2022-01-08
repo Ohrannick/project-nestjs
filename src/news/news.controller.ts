@@ -1,4 +1,3 @@
-import { CommentsEntity } from './comments/comments.entity';
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseIntPipe, Post, Put, Render, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { CommentsService } from './comments/comments.service';
 import { NewsService } from './news.service';
@@ -6,12 +5,12 @@ import { CreateNewsDto } from './dtos/create-news-dto';
 import { EditNewsDto } from './dtos/edit-news-dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { HelperFileLoader } from 'src/utils/HelperFileLoader';
-import { MailService } from 'src/mail/mail.service';
+import { HelperFileLoader } from '../utils/HelperFileLoader';
+import { MailService } from '../mail/mail.service';
 import { NewsEntity } from './news.entity';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Roles } from 'src/auth/role/roles.decorator';
-import { Role } from 'src/auth/role/role.enum';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Roles } from '../auth/role/roles.decorator';
+import { Role } from '../auth/role/role.enum';
 
 const PATH_NEWS = '/news-static/';
 HelperFileLoader.path = PATH_NEWS;
