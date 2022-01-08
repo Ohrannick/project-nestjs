@@ -16,5 +16,5 @@ export class CreateNewsDto {
 
   @IsNotEmpty()
   @IsString()
-  userId: string
+  userId: string;
 }

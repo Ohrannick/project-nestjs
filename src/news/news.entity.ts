@@ -1,3 +1,4 @@
+import { CategoriesEntity } from 'src/categories/categories.entity';
 import { UsersEntity } from 'src/users/users.entity';
 import {
   Column,
@@ -32,8 +33,8 @@ export class NewsEntity {
   @OneToMany(() => CommentsEntity, (comments) => comments.news)
   comments: CommentsEntity[];
 
-  // @ManyToOne(() => CategoriesEntity, (category) => category.news)
-  // category: CategoriesEntity;
+  @ManyToOne(() => CategoriesEntity, (category) => category.news)
+  category: CategoriesEntity;
 
 
   @CreateDateColumn({ type: 'timestamp' })

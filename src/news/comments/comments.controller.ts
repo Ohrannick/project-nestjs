@@ -13,10 +13,11 @@ export class CommentsController {
   constructor(private readonly commentsService: CommentsService) { }
 
   @Post('/api/:idNews')
+  @Render('create-comments')
   async create(
     @Param('idNews', ParseIntPipe) idNews: number,
     @Body() comments: CreateCommentDto,
-    // @Render('create-comments'),
+
   ) {
     return await this.commentsService.create(idNews, comments)
   }

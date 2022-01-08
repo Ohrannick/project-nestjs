@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Comment } from './comments/comments.service';
+import { Comment, CommentsService } from './comments/comments.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { NewsEntity } from './news.entity';
@@ -32,6 +32,7 @@ export class NewsService {
     @InjectRepository(NewsEntity)
     private newsRepository: Repository<NewsEntity>,
     private usersService: UsersService,
+    // private commentsService: CommentsService,
   ) { }
 
   async create(news: CreateNewsDto): Promise<NewsEntity> {
@@ -69,7 +70,10 @@ export class NewsService {
 
   async remove(id: News['id']): Promise<NewsEntity | null> {
     const removeNews = await this.findById(id);
+    // const removeComments = await this.commentsService.findAll(id)
+    // console.log(removeNews, '+', removeComments)
     if (removeNews) {
+      // this.commentsService.removeAll(id)
       return this.newsRepository.remove(removeNews)
     }
     return null

@@ -2,35 +2,23 @@
 <img src="http://localhost:3000{{news.cover}}" style="width: 200px" class="card-img-top" alt="{{news.cover}}" />
 <h1>{{news.title}}</h1>
 <div>{{news.description}}</div>
-<div class="text-muted">Автор: {{news.author}}</div>
+<div class="text-muted">Автор: {{news.user.firstName}}</div>
 
 <form action="">
-  <div class="mb-3">
-    <label for="author" class="form-label">Автор</label>
-    <input class="form-control" name="author" id="author">
-  </div>
-  <div class="mb-3">
-    <label for="message" class="form-label">Сообщение</label>
-    <textarea class="form-control" id="message" name="message" rows="3"></textarea>
-  </div>
-  <div class="form-group">
-    <label for="avatar">Аватарка</label>
-    <input type="file" class="form-control-file" id="avatar" name="avatar">
-  </div>
   <button type="button" class="btn btn-primary" onclick='sendForm()'>Оставить комментарий</button>
 </form>
 
-{{#if comments}}
+{{#if news.comments}}
 <h2>Список комментариев</h2>
-{{#each comments}}
+{{#each news.comments}}
 <div class="row">
   <div class="col-lg-1">
-    <img src={{#if this.avatar}} "http://localhost:3000{{this.avatar}}" {{else}}
+    <img src={{#if this.user.avatar}} "http://localhost:3000{{this.user.avatar}}" {{else}}
       https://hostenko.com/wpcafe/wp-content/uploads/rndavatar.png {{/if}} style="width: 75px; height: 75px;"
       class="rounded-lg mb-2" />
   </div>
   <div class="col-lg-8">
-    <div>Автор: {{this.author}}</div>
+    <div>Автор: {{this.user.firstName}}</div>
     <div>{{this.message}}</div>
   </div>
 </div>
