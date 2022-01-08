@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseIntPipe, Post, Put, Render, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { CommentsEntity } from './comments/comments.entity';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseIntPipe, Post, Put, Render, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { CommentsService } from './comments/comments.service';
 import { NewsService } from './news.service';
 import { CreateNewsDto } from './dtos/create-news-dto';
@@ -8,6 +9,9 @@ import { diskStorage } from 'multer';
 import { HelperFileLoader } from 'src/utils/HelperFileLoader';
 import { MailService } from 'src/mail/mail.service';
 import { NewsEntity } from './news.entity';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Roles } from 'src/auth/role/roles.decorator';
+import { Role } from 'src/auth/role/role.enum';
 
 const PATH_NEWS = '/news-static/';
 HelperFileLoader.path = PATH_NEWS;
@@ -66,9 +70,11 @@ export class NewsController {
       )
     }
 
-    return news
+    return { news }
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Roles(Role.Admin, Role.Moderator)
   @Post('/api')
   @UseInterceptors(
     FileInterceptor('cover', {
@@ -84,7 +90,7 @@ export class NewsController {
     @UploadedFile() cover: Express.Multer.File,
   ): Promise<NewsEntity> {
     const fileExtention = cover.originalname.split('.').reverse()[0];
-    if (!fileExtention || !fileExtention.match(/(jpg|jpeg|png|gif)$/)) {
+    if (!fileExtention || !fileExtention.match(/(jpg|jpeg|png|gif)$/i)) {
       throw new HttpException({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         error: 'Неверный формат файла',
@@ -116,8 +122,9 @@ export class NewsController {
   }
 
   @Delete('/api/:id')
-  async remove(@Param('id', ParseIntPipe) id: number): Promise<NewsEntity> {
+  async remove(@Param('id') id: number): Promise<NewsEntity> {
     const isRemoved = await this.newsService.remove(id);
+    // console.log(isRemoved)
     throw new HttpException(
       {
         status: HttpStatus.OK,

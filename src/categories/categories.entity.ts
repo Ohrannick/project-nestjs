@@ -9,6 +9,6 @@ export class CategoriesEntity {
   @Column('text')
   name: string;
 
-  // @OneToMany(() => NewsEntity, (news) => news.category)
-  // news: NewsEntity[];
+  @OneToMany(() => NewsEntity, (news) => news.category)
+  news: NewsEntity[];
 }

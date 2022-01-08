@@ -7,9 +7,10 @@ import { CommentsEntity } from './comments.entity';
 import { CommentsService } from './comments.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CommentsEntity]), forwardRef(() => NewsModule), UsersModule],
+  imports: [TypeOrmModule.forFeature([CommentsEntity]),
+  forwardRef(() => NewsModule), UsersModule],
   controllers: [CommentsController],
   providers: [CommentsService],
-  exports: [CommentsService],
+  exports: [CommentsService, TypeOrmModule.forFeature([CommentsEntity])],
 })
 export class CommentsModule { }

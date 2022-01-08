@@ -1,19 +1,16 @@
 {{#if news}}
 <img src="http://localhost:3000{{news.cover}}" style="width: 200px" class="card-img-top" alt="{{news.cover}}" />
 <h1>{{news.title}}</h1>
-<div>{{news.description}}</div>
-<div class="text-muted">Автор: {{news.author}}</div>
+
 
 <form action="">
   <div class="mb-3">
     <label for="author" class="form-label">Автор</label>
-    <input class="form-control" name="author" id="author" value="{{news.author}}">
-    <label for="title" class="form-label">Заголовок</label>
-    <input class="form-control" name="title" id="title" value="{{news.title}}">
+    <input class="form-control" name="author" id="author" value="{{news.user.firstName}}">
   </div>
   <div class="mb-3">
     <label for="message" class="form-label">Сообщение</label>
-    <textarea class="form-control" id="message" name="message" rows="3" value="{{news.message}}"></textarea>
+    <textarea class="form-control" id="message" name="message" rows="3">{{news.description}}</textarea>
   </div>
   <button type="button" class="btn btn-primary" onclick='sendForm()'>Сохранить</button>
 </form>
@@ -28,8 +25,9 @@
       cache: false,
       contentType: false,
       processData: false,
-      method: 'PUT',
+      method: 'POST',
       success: function () {
+        alert('Новость создана')
         window.location.reload()
       }
     });

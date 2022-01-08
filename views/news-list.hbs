@@ -7,10 +7,10 @@
       alt=''>
     <div class="card-body">
       <h5 class="card-title">{{this.title}}</h5>
-      <h6 class="card-subtitle mb-2 text-muted">Автор: {{users.firstName}}</h6>
+      <h6 class="card-subtitle mb-2 text-muted">Автор: {{this.user.firstName}}</h6>
       <p class="card-text">{{this.description}}</p>
-      <p class="card-text">{{this.createdAt}}</p>
-      <p class="card-text">{{this.updatedAt}}</p>
+      {{!-- <p class="card-text">{{this.createdAt}}</p>
+      <p class="card-text">{{this.updatedAt}}</p> --}}
       <div class="btn btn-primary" onclick="window.location.href = '/news/detail/{{this.id}}'" style="cursor: pointer">К
         новости</div>
       <a href="http://localhost:3000/news/edit/api/{{this.id}}" class="btn btn-success">Редактировать новость</a>
