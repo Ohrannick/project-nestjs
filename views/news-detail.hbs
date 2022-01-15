@@ -1,34 +1,27 @@
 {{#if news}}
-<img src="http://localhost:3000{{news.cover}}" style="width: 200px" class="card-img-top" alt="{{news.cover}}" />
-<h1>{{news.title}}</h1>
-<div>{{news.description}}</div>
-<div class="text-muted">Автор: {{news.user.firstName}}</div>
-
-<form action="">
-  <button type="button" class="btn btn-primary" onclick='sendForm()'>Оставить комментарий</button>
-</form>
-
-{{#if news.comments}}
-<h2>Список комментариев</h2>
-{{#each news.comments}}
-<div class="row">
-  <div class="col-lg-1">
-    <img src={{#if this.user.avatar}} "http://localhost:3000{{this.user.avatar}}" {{else}}
-      https://hostenko.com/wpcafe/wp-content/uploads/rndavatar.png {{/if}} style="width: 75px; height: 75px;"
-      class="rounded-lg mb-2" />
+  <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+    <div class="col-10 col-sm-8 col-lg-6">
+      <img src="{{news.cover}}" class="d-block mx-lg-auto img-fluid" alt="{{news.title}}" width="700" height="500" loading="lazy">
+    </div>
+    <div class="col-lg-6">
+      <h1 class="display-5 fw-bold lh-1 mb-3">{{news.title}}</h1>
+      <div class="text-muted">Дата создания: {{news.createdAt}}</div>
+      <div class="text-muted">Автор: {{news.user.firstName}} {{news.user.lastName}}</div>
+      <p class="lead">{{news.description}}</p>
+    </div>
   </div>
-  <div class="col-lg-8">
-    <div>Автор: {{this.user.firstName}}</div>
-    <div>{{this.message}}</div>
-  </div>
+{{else}}
+  <h1>Список новостей пуст!</h1>
+{{/if}}
+
+<!-- Блок комментариев -->
+<h2 class="fw-bold lh-1 mb-3">Комментарии</h2>
+<!-- Блок, куда ReactJS будет вставлять вёрстку комментариев -->
+<div id="app">
 </div>
-{{/each}}
-{{else}}
-<h4>Комментариев нет...</h4>
-{{/if}}
-{{else}}
-<h1>Список новостей пуст!</h1>
-{{/if}}
+
+<!-- Подключим ReactJS-скрипт комментариев -->
+<script src="/js/comments.js" type="text/babel"></script>
 
 <script>
   function sendForm() {
