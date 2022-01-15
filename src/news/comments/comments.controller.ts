@@ -1,4 +1,5 @@
-import { Controller, Param, Post, Body, Get, Delete, Put, UseInterceptors, UploadedFile, Render, ParseIntPipe } from '@nestjs/common';
+import { Controller, Param, Post, Body, Get, Delete, Put, UseInterceptors, UploadedFile, Render, ParseIntPipe, UseGuards, Req } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { HelperFileLoader } from 'src/utils/HelperFileLoader';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dtos/create-comment-dto';
@@ -11,13 +12,15 @@ export class CommentsController {
   constructor(private readonly commentsService: CommentsService) { }
 
   @Post('/api/:idNews')
+  @UseGuards(JwtAuthGuard)
   @Render('create-comments')
   async create(
     @Param('idNews', ParseIntPipe) idNews: number,
-    @Body() comments: CreateCommentDto,
-
+    @Body() comment: CreateCommentDto,
+    @Req() req,
   ) {
-    return await this.commentsService.create(idNews, comments)
+    const jwtUserId = req.user.userId;
+    return this.commentsService.create(idNews, comment.message, jwtUserId);
   }
 
   @Put('/api/:idComment')
